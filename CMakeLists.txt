@@ -56,7 +56,7 @@ if(WINRT)
     add_definitions(-DWINRT_STORE)
   endif()
 
-  if(CMAKE_SYSTEM_VERSION MATCHES 10)
+  if(CMAKE_SYSTEM_VERSION MATCHES 10.0)
     set(WINRT_10 TRUE)
     add_definitions(-DWINRT_10)
   elseif(CMAKE_SYSTEM_VERSION MATCHES 8.1)
@@ -237,8 +237,8 @@ OCV_OPTION(BUILD_ANDROID_EXAMPLES   "Build examples for Android platform"       
 OCV_OPTION(BUILD_DOCS               "Create build rules for OpenCV Documentation" ON  IF (NOT WINRT OR APPLE_FRAMEWORK))
 OCV_OPTION(BUILD_EXAMPLES           "Build all examples"                          OFF )
 OCV_OPTION(BUILD_PACKAGE            "Enables 'make package_source' command"       ON  IF NOT WINRT)
-OCV_OPTION(BUILD_PERF_TESTS         "Build performance tests"                     ON  IF (NOT APPLE_FRAMEWORK) )
-OCV_OPTION(BUILD_TESTS              "Build accuracy & regression tests"           ON  IF (NOT APPLE_FRAMEWORK) )
+OCV_OPTION(BUILD_PERF_TESTS         "Build performance tests"                     ON  IF (NOT APPLE_FRAMEWORK AND NOT WINRT) )
+OCV_OPTION(BUILD_TESTS              "Build accuracy & regression tests"           ON  IF (NOT APPLE_FRAMEWORK AND NOT WINRT) )
 OCV_OPTION(BUILD_WITH_DEBUG_INFO    "Include debug info into debug libs (not MSCV only)" ON )
 OCV_OPTION(BUILD_WITH_STATIC_CRT    "Enables use of staticaly linked CRT for staticaly linked OpenCV" ON IF MSVC )
 OCV_OPTION(BUILD_WITH_DYNAMIC_IPP   "Enables dynamic linking of IPP (only for standalone IPP)" OFF )
@@ -494,6 +494,11 @@ endif()
 
 include(cmake/OpenCVCompilerOptions.cmake)
 
+# Mandatory for Universal Windows Platform (UWP)
+if(MSVC AND WINRT AND NOT ENABLE_WINRT_MODE_NATIVE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /WINMD")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /ZW")
+endif()
 
 # ----------------------------------------------------------------------------
 # Use statically or dynamically linked CRT?

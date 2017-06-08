@@ -94,10 +94,10 @@ Media::CaptureFrameGrabber::~CaptureFrameGrabber()
 
 void Media::CaptureFrameGrabber::ShowCameraSettings()
 {
-#if WINAPI_FAMILY!=WINAPI_FAMILY_PHONE_APP
-    if (_state == State::Started)
+#if WINAPI_FAMILY!=WINAPI_FAMILY_PHONE_APP // the Windows API family partitioning is outdated and has to be rewritten
+    if (_state == State::Started && Windows::Foundation::Metadata::ApiInformation::IsApiContractPresent("Windows.Media.Capture.CameraCaptureUIContract", 1))
     {
-        CameraOptionsUI::Show(_capture.Get());
+        CameraOptionsUI::Show(_capture.Get()); // this will only compile with 'Windows Desktop Extensions for the UWP'
     }
 #endif
 }

@@ -209,7 +209,7 @@ int cv::waitKeyEx(int delay)
 int cv::waitKey(int delay)
 {
     int code = waitKeyEx(delay);
-#ifndef HAVE_WINRT
+#ifndef WINRT
     static int use_legacy = -1;
     if (use_legacy < 0)
     {

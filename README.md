@@ -1,20 +1,28 @@
-### OpenCV: Open Source Computer Vision Library
+# opencvWinRT
 
-#### Resources
+WinRT/UWP compatible fork of OpenCV 3.2.0. The adjustments are necessary to build OpenCV for UWP apps and especially for the Microsoft HoloLens.
 
-* Homepage: <http://opencv.org>
-* Docs: <http://docs.opencv.org/master/>
-* Q&A forum: <http://answers.opencv.org>
-* Issue tracking: <https://github.com/opencv/opencv/issues>
+# Building opencvWinRT
 
-#### Contributing
+1. Simply use cmake to generate a Visual Studio project:
+```
+cd "\<build_dir\>"
+cmake -G "\<generator\>" -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0 -DCMAKE_CROSSCOMPILING=OFF "\<src_dir\>"
+```
 
-Please read before starting work on a pull request: <https://github.com/opencv/opencv/wiki/How_to_contribute>
+For example:
+```
+cd "C:\\builds\\opencvWinRT\\"
+cmake -G "Visual Studio 14 2015" -DCMAKE_SYSTEM_NAME=WindowsStore -DCMAKE_SYSTEM_VERSION=10.0 -DCMAKE_CROSSCOMPILING=OFF "C:\\github\\opencvWinRT\\"
+```
 
-Summary of guidelines:
+If you prefer the cmake-gui instead, make sure to add the following CMake flags before pressing *Configure* the first time:
+```
+CMAKE_SYSTEM_NAME = WindowsStore
+CMAKE_SYSTEM_VERSION = 10.0
+CMAKE_CROSSCOMPILING = OFF
+```
 
-* One pull request per issue;
-* Choose the right base branch;
-* Include tests and documentation;
-* Clean up "oops" commits before submitting;
-* Follow the coding style guide.
+2. Open the generated project file _\<build_dir\>\\OpenCV.sln_ and build the `INSTALL` target.
+3. Reference the installation path "`\<build_path\>\\install\\`" in your WinRT projects.
+4. Don't forget to copy the OpenCV binaries to your UWP project folder.
